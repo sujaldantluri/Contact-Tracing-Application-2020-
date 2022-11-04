@@ -1,0 +1,169 @@
+#will work by asking user for the date of the entry they want
+#from there, the user can ask for the date, location, and people met
+
+
+def readFile():
+    search = queries()
+    str(search)
+    reportCheck = 0
+    reportCount = 1
+    tList = []
+    fileData = open("contactReport.txt", mode='r')
+    for line in fileData:
+        line = line[1:-2]
+        tList = line.split(",")
+        tList[0] = tList[0].strip(" ' ")
+        tList[1] = tList[1].strip(" ' ")
+
+        if tList[0] == search:
+            print("Report #" + str(reportCount)+ " for: " + search)
+            print("Date: " + tList[0])
+            print("Location: " + tList[1])
+            print("People: " + str(tList[2:]))
+            reportCheck = reportCheck + 1
+            reportCount = reportCount + 1
+        elif tList[1] == search:
+            print("Report #" + str(reportCount)+ " for: " + search)
+            print("Date: " + tList[0])
+            print("Location: " + tList[1])
+            print("People: " + str(tList[2:]))
+            reportCheck = reportCheck + 1
+            reportCount = reportCount + 1
+
+    if reportCheck == 0:
+        print("There was no entry in the file for " + search + ". \nThank you for using the DePaul Contact Tracing Application!")
+
+
+#this function will ask the user for how to search file
+#returns a list that can be used in readFile()  
+def queries():
+  monthTrue = True
+  monthError= "\nJanuary=1, Febuary=2, March=3, April=4, May=5, June=6, July=7, August=8, September=9, October=10, November=11, December=12"
+  locationWrong = True
+  daley = "RMD"
+  cdm = "CDM"
+  depaul = "DC"
+  lewis = "LC"
+  jackson = "55EJ"
+
+  #ASKS THE USER WHAT TO SEARCH BY
+  while True:
+    choice = input("What would you like to search by? Enter D for date or L for location. ")
+    choice = choice.lower() 
+    if choice == "d" or choice == "l":
+      choice = choice.lower() 
+      print(choice)
+      break
+    else:
+      print("Invalid entry. Please type in one of the following: (D, L)" )
+      continue
+
+  #VALIDATES M/D IF USER SEARCHES BY DATE
+  if choice == "d":
+  #VALIDATES MONTH
+    while monthTrue:
+      month= input("\nWhat month were you at DePaul? Provide a number 1-12. (e.g. Jan is 1): ")    
+      if not month.isnumeric():
+        print("\nMonth needs to be a number 1-12")
+        print("\nNote:" + monthError)
+        continue
+      if int(month)<=12 and int(month) > 0:
+        print("\nConfirming month of search as: " + month)
+        monthTrue = False
+        break
+      else:
+        print(monthError)
+      
+    #VALIDATES DAY
+    while True:
+      day = input("\nWhat day do you want to search by? Pick a date between 1 and 31: ")
+      if not day.isnumeric():
+        print("\nNote: Day must be a number 1-31.")
+        continue
+      if int(day) >= 1 and int(day) <= 31: 
+        print("\nConfirming day of search as: "+ day)
+        break
+      else:
+        print("\nNote: Day must be a number 1-31.")
+
+    md = month + "/" + day
+    return md
+  
+
+  #VALIDATES LOCATION IF USER CHOOSES LOCATION
+  if choice == "l":
+    while locationWrong:
+      location = input("\nWhich building are you going to search by? \nFor Richard M Daley Building, enter 'RMD'\nFor CDM Center, enter 'CDM' \nFor DePaul Center, enter 'DC'\nFor Lewis Center, enter 'LC'\nFor 55 East Jackson, enter '55EJ':\n")
+      location = location.upper()
+      if location == daley or location == cdm or location == depaul or location == lewis or location == jackson:
+        locationWrong == False
+        print("\nConfirming location of search as: " + location)
+        return location
+      else:
+        print("\nSorry, that wasn't a valid input. Please enter a valid building code from the list.\n")
+        continue
+
+    
+
+readFile()
+
+
+
+
+##another way of structuring for reading file and taking in queries. not finished tho
+'''
+def loadReport():
+
+    report=[]
+    fileData= open("contactReport.txt", "r")
+    lines= fileData.readlines()
+
+
+    for line in lines:
+      line= line.strip("\n")
+      date= line.split(",")[0]
+      location=line.split(",")[1]
+      people=line.split(",")[2:]
+      report.append((date, location, people))
+      print(report)
+  
+    return report
+
+
+def queries():
+    report = loadReport()
+    qLoc= input("Pick a location you'd like info on.").strip(" ")
+    qDate= input("Pick a date you'd like info on, formatted mm/dd").strip(" ")
+    qPerson= input("Pick a person you'd like info on.". strip(" "))
+
+
+
+    for item in report:
+        date= report[0]
+        print(date)
+        location= report[1]
+        print(location)
+        people= report[2]
+        print(people)
+  
+        if qLoc==location:
+            print(people + "visited the " + location + "on" + date)
+        else:
+            print("Please pick one of the following locations.")
+            
+        if qDate==date:
+            print("On " + qdate + people + "were at the " + location)
+        else:
+            print("Date format must be mm/dd")
+
+
+        for person in people:
+            if qPerson== person:
+                print("On" + date + qPerson + "was at " + location)
+            else:
+                print("There is no " + qPerson + "in our data.")
+                print("Make sure you spelled everything correctly.")
+
+queries()
+'''
+
