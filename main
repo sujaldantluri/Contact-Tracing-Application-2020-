@@ -1,0 +1,114 @@
+#Program to  trace contact between students on the Loop Campus
+
+def userInput():
+  #asks for user input(location, people met, date)
+  #Possible locations: Richard M Daley Building, CDM Center, DePaul Center , Lewis Center, 55 East Jackson 
+  print("Welcome to the DePaul Contact Tracing Reporting Application! This application has been designed to keep DePaul students safe during COVID-19. Please enter details accurately to help prevent the spread.\n")
+  
+  daley = "RMD"
+  cdm = "CDM"
+  depaul = "DC"
+  lewis = "LC"
+  jackson = "55EJ"
+
+  locationWrong = True
+  monthError= "\nJanuary=1, Febuary=2, March=3, April=4, May=5, June=6, July=7, August=8, September=9, October=10, November=11, December=12"
+  dayError= "\nDay needs to be a number 1-31."
+  dataList = []
+  contactList = []
+  monthTrue = True
+
+  print("\nVISITING INFORMATION INPUT REQUEST:\n")
+  #asks for date
+  while monthTrue:
+    month= input("\nWhat month were you at DePaul? Provide a number 1-12. (e.g. Jan is 1): ")
+
+    
+    if not month.isnumeric():
+      print("\nMonth needs to be a number 1-12")
+      print("\nNote:" + monthError)
+      continue
+    if int(month)<=12 and int(month) > 0:
+      print("\nConfirming month of visit as: " + month)
+      monthTrue = False
+      break
+    else:
+      print(monthError)
+      
+      
+      
+
+
+  while True:
+    day = input("\nWhat day did you visit campus? Pick a date between 1 and 31: ")
+    
+    if not day.isnumeric():
+      print("\nNote: Day must be a number 1-31.")
+      continue
+    if int(day) >= 1 and int(day) <= 31: 
+      print("\nConfirming day of visit as: "+ day)
+      break
+    else:
+      print(dayError)
+
+  #asks user for LOCATION
+  while locationWrong:
+    location = input("\nWhich Loop Campus building did you visit? \nFor Richard M Daley Building, enter 'RMD'\nFor CDM Center, enter 'CDM' \nFor DePaul Center, enter 'DC'\nFor Lewis Center, enter 'LC'\nFor 55 East Jackson, enter '55EJ':\n")
+    location = location.upper()
+    if location == daley or location == cdm or location == depaul or location == lewis or location == jackson:
+      locationWrong == False
+      print("\nConfirming location of visit as: " + location)
+      break
+    else:
+      print("\nSorry, that wasn't a valid input. Please enter a valid building code from the list.\n")
+      continue
+  #asks user for PEOPLE CONTACTED
+ 
+  peopleSeen=[]
+  ##one way for names
+  while True:
+      print("\nHow many people have you seen?")
+      peopleCount= input()
+      print("\nConfirming the number of people seen: " + peopleCount)
+      if not peopleCount.isnumeric():
+          print("\nTry again. Enter a positive integer.")
+            
+      else:
+          number= int(peopleCount)
+
+          
+          for i in range(0,number):
+              print("\nList someone you came into contact with. Please enter ONE person's first and last name at a time.")
+              person= str(input())
+              peopleSeen.append(person)
+              
+          
+
+          if len(peopleSeen)==number:
+              print("\nYou have come into contact with: ")
+              break
+              
+      
+              
+
+  
+ ##turning list to string
+  peopleStr= ', '.join([str(elem) for elem in peopleSeen])
+  print(peopleStr.title())
+  print("\nThank you for keeping DePaul safe! We have logged your inputs as confirmed below. Have a nice day!")
+
+
+  dataList = [month + "/" + day, location, peopleStr]
+  return dataList
+
+def writeToFile():
+  dataList = userInput()
+  str(dataList)
+  print(dataList)
+  contactFile = open("contactReport.txt", mode = 'a')
+  contactFile.write(str(dataList))
+  contactFile.write("\n")
+  contactFile.close()
+
+
+writeToFile()
